@@ -1,13 +1,14 @@
 #millor treballar amb define o algun sistema simular a l'enum de C++
 from enumeracions import *
 from Server import *
+from enumeracions import *
 
 class Source:
 
     def __init__(self,scheduler):
         # inicialitzar element de simulació
         entitatsCreades=0
-        self.state=idle
+        self.state= enumeracions.idle
         self.scheduler=scheduler
     
     def crearConnexio(self,server):
@@ -29,7 +30,7 @@ class Source:
         # Cal crear l'entitat 
         entitat=self.crearEntitat(self)
         # Mirar si es pot transferir a on per toqui
-        if (server.estat==idle):
+        if (server.estat==enumeracions.idle):
             #transferir entitat (es pot fer amb un esdeveniment immediat o invocant a un métode de l'element)
             server.recullEntitat(event.time,entitat)
         else:
