@@ -1,7 +1,7 @@
 #millor treballar amb define o algun sistema simular a l'enum de C++
 
 from Server import *
-from event import *
+from Event import *
 
 class Server:
 

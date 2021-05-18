@@ -1,46 +1,48 @@
 from enumeracions import *
 from EventsEnum import *
-from AscensorEvent import *
+from Event import *
+
 
 class Ascensor:
 
     # creació d'un nou Ascensor
     def __init__(self, cyclesToBreak, ascensorEvent: EventsEnum):
         # cicles que durarà l'ascensor abans d'espatllar-se'
-        self.cyclesToBreak = object;
+        # self.cyclesToBreak = object;
         # valor per defecte dels cicles de l'ascensor
-        self.currentCycles = 0;
+
+        # self.currentCycles = 0;
         # estat per defecte de l'ascensor
-        self.ascensorEvent = ascensorEvent;
+        # self.ascensorEvent = ascensorEvent;
+        print("me creé")
 
     def setAscensorState(self, ascensorEvent: EventsEnum):
         self.ascensorEvent = ascensorEvent;
 
-    def tractarEsdeveniment(self, event: AscensorEvent):
-
-        if (event.tipus == EventsEnum.MOVING):
+    def treatEvent(self, event: Event):
+        if event.tipus == EventsEnum.MOVING:
             self.startMoving(event)
-            
-		if (event.tipus == EventsEnum.ENTITY_TRANSFER):
+
+        elif event.tipus == EventsEnum.ENTITY_TRANSFER:
             self.startEntityTransfer(event)
 
-		if (event.tipus == EventsEnum.BROKEN):
+        elif event.tipus == EventsEnum.BROKEN:
             self.startBroken(event)
-            
-		if (event.tipus == EventsEnum.IDLE):
-            self.startIdle(event)   
-                     
-		if (event.tipus == EventsEnum.OUT_OF_SERVICE):
+
+        elif event.tipus == EventsEnum.IDLE:
+            self.startIdle(event)
+
+        elif event.tipus == EventsEnum.OUT_OF_SERVICE:
             self.startOutOfService(event)
 
-        if (event.tipus == 'END_SERVICE'):
+        elif event.tipus == 'END_SERVICE':
             self.processarFiServei(event)
 
-    def crearConnexio(self, server2, queue):
+    def createConnection(self, server2, queue):
         self.queue = queue
         self.server = server2
 
-    def recullEntitat(self, time, entitat):
+    def pickEntity(self, time, entitat):
         self.entitatsTractades = entitat
         self.programarFinalServei(time, entitat)
 
@@ -52,18 +54,18 @@ class Ascensor:
         self.state = EventsEnum.ENTITY_TRANSFER
         self.entitatsTractades = 0
 
-    def startBroken (self):
+    def startBroken(self):
         self.state = EventsEnum.BROKEN
         self.entitatsTractades = 0
 
-    def startIdle (self):
+    def startIdle(self):
         self.state = EventsEnum.IDLE
         self.entitatsTractades = 0
-        
+
     def startOutOfService(self, event):
         self.state = enumeracions.OUT_OF_SERVICE
-        self.entitatsTractades = 0   
-             
+        self.entitatsTractades = 0
+
     def simulationStart(self, event):
         self.state = enumeracions.idle
         self.entitatsTractades = 0
@@ -79,16 +81,13 @@ class Ascensor:
 
     def processarFiServei(self, event):
         # Registrar estadístics
-        self.entitatsTractades = self.entitatsTractades + 1
+        # self.entitatsTractades = self.entitatsTractades + 1
         # Mirar si es pot transferir a on per toqui
-        if (server.estat == enumeracions.idle):
-            # transferir entitat (es pot fer amb un esdeveniment immediat o invocant a un métode de l'element)
-            server.recullEntitat(event.time, event.entitat)
-        else:
-            if (queue.estat == enumeracions.idle):
-                queue.recullEntitat(event.time, event.entitat)
-            ...
+        # if (server.estat == enumeracions.idle):
+        # transferir entitat (es pot fer amb un esdeveniment immediat o invocant a un métode de l'element)
+        #   server.recullEntitat(event.time, event.entitat)
+        # else:
+        #    if (queue.estat == enumeracions.idle):
+        #        queue.recullEntitat(event.time, event.entitat)
+
         self.estat = enumeracions.idle
-
-    ...
-
