@@ -19,7 +19,19 @@ class Ascensor:
     def tractarEsdeveniment(self, event: AscensorEvent):
 
         if (event.tipus == EventsEnum.MOVING):
-            self.startMoving()
+            self.startMoving(event)
+            
+		if (event.tipus == EventsEnum.ENTITY_TRANSFER):
+            self.startEntityTransfer(event)
+
+		if (event.tipus == EventsEnum.BROKEN):
+            self.startBroken(event)
+            
+		if (event.tipus == EventsEnum.IDLE):
+            self.startIdle(event)   
+                     
+		if (event.tipus == EventsEnum.OUT_OF_SERVICE):
+            self.startOutOfService(event)
 
         if (event.tipus == 'END_SERVICE'):
             self.processarFiServei(event)
@@ -32,8 +44,26 @@ class Ascensor:
         self.entitatsTractades = entitat
         self.programarFinalServei(time, entitat)
 
+    def startMoving(self):
+        self.state = EventsEnum.MOVING
+        self.entitatsTractades = 0
 
+    def startEntityTransfer(self):
+        self.state = EventsEnum.ENTITY_TRANSFER
+        self.entitatsTractades = 0
 
+    def startBroken (self):
+        self.state = EventsEnum.BROKEN
+        self.entitatsTractades = 0
+
+    def startIdle (self):
+        self.state = EventsEnum.IDLE
+        self.entitatsTractades = 0
+        
+    def startOutOfService(self, event):
+        self.state = enumeracions.OUT_OF_SERVICE
+        self.entitatsTractades = 0   
+             
     def simulationStart(self, event):
         self.state = enumeracions.idle
         self.entitatsTractades = 0
