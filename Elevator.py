@@ -1,20 +1,27 @@
 from enumeracions import *
 from EventsEnum import *
 from Event import *
+import enum
 
 
-class Ascensor:
+class ElevatorState(enum.Enum):
+    IDLE = 0
+    MOVING = 1
+    ENTITY_TRANSFER = 2
+    BROKEN = 3
 
-    # creació d'un nou Ascensor
-    def __init__(self, cyclesToBreak, ascensorEvent: EventsEnum):
-        # cicles que durarà l'ascensor abans d'espatllar-se'
-        # self.cyclesToBreak = object;
-        # valor per defecte dels cicles de l'ascensor
+    # This one only available for the 3rd elevator
+    OUT_OF_SERVICE = 4
 
-        # self.currentCycles = 0;
-        # estat per defecte de l'ascensor
-        # self.ascensorEvent = ascensorEvent;
-        print("me creé")
+
+class Elevator:
+
+    # Initialization of an elevator
+    def __init__(self, cyclesToBreak):
+        self.cyclesToBreak = cyclesToBreak
+        self.currentCycles = 0
+        self.state = ElevatorState.IDLE
+        self.floor = 0
 
     def setAscensorState(self, ascensorEvent: EventsEnum):
         self.ascensorEvent = ascensorEvent;
