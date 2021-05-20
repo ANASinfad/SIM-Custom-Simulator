@@ -1,10 +1,9 @@
-from enumeracions import *
-from EventsEnum import *
+from TransitionsEnum import *
 
 
 class Event:
     # creació d'un nou esdeveniment
-    def __init__(self, entity, type: EventsEnum, time):
+    def __init__(self, entity, type: TransitionsEnum, time):
         # objecte que processarà l'esdeveniment
         self.entity = entity
         # type event

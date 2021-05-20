@@ -5,7 +5,8 @@ CONST_DEFAULT_MTF3 = 300
 CONST_DEFAULT_NUMBER_LEVELS = 10
 CONST_DEFAULT_SCALE_LEVEL = 1
 
-#this class holds the input information of the user
+
+# this class holds the input information of the user
 class InputModule:
 
     def __init__(self):
