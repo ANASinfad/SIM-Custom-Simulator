@@ -13,6 +13,13 @@ class ElevatorState(enum.Enum):
     # This one only available for the 3rd elevator
     OUT_OF_SERVICE = 4
 
+class TransitionsEnum(enum.Enum):
+    REACH_DESTINATION = 0
+    BREAK = 1
+    FIX = 2
+    DOORS_CLOSED = 3
+    ONE_BROKEN = 4
+    ALL_FIXED = 5
 
 class Elevator:
 
@@ -23,7 +30,7 @@ class Elevator:
         self.state = ElevatorState.IDLE
         self.floor = 0
 
-    def setAscensorState(self, ascensorEvent: EventsEnum):
+    def setElevatorState(self, ascensorEvent: ElevatorState):
         self.ascensorEvent = ascensorEvent;
 
     def treatEvent(self, event: Event):

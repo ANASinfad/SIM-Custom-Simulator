@@ -1,6 +1,7 @@
 from enumeracions import *
 from EventsEnum import *
 
+
 class Event:
     # creació d'un nou esdeveniment
     def __init__(self, entity, type: EventsEnum, time):
