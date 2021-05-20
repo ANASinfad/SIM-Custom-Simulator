@@ -1,5 +1,6 @@
-from InputModule import InputModule
 from Elevator import Elevator
+from EntityGenerator import *
+from InputModule import InputModule
 
 
 class Scheduler:
@@ -13,7 +14,8 @@ class Scheduler:
         self.elevators.append(Elevator(self.inputModule.MTF1))
         self.elevators.append(Elevator(self.inputModule.MTF2))
         self.elevators.append(Elevator(self.inputModule.MTF3))
-        currentTime = 0
+        self.generator = EntityGenerator()
+        self.currentTime = 0
 
         #self.source = Source()
         #self.Server = Server()
@@ -28,6 +30,10 @@ class Scheduler:
 
     def run(self):
         print("running process...")
+        # miramos si el evento devuelto por el generador es nulo o no
+        generatorEvent = self.generator.generateEntity(self.currentTime)
+        if generatorEvent is not None:
+            self.eventList.append(generatorEvent)
         #configurar el model per consola, arxiu de text...
         #self.configurarModel()
 

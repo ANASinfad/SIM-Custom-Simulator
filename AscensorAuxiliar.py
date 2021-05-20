@@ -1,4 +1,3 @@
 from Elevator import *
 
-class AscensorAuxiliar(Ascensor):
-    ;
+class AscensorAuxiliar(Elevator):

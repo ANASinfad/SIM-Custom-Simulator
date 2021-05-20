@@ -1,7 +1,4 @@
-from enumeracions import *
-from EventsEnum import *
 from Event import *
-import enum
 
 
 class ElevatorState(enum.Enum):
@@ -20,30 +17,31 @@ class Elevator:
     def __init__(self, cyclesToBreak):
         self.cyclesToBreak = cyclesToBreak
         self.currentCycles = 0
-        self.state = ElevatorState.IDLE
+        self.startIdle()
         self.floor = 0
 
-    def setAscensorState(self, ascensorEvent: EventsEnum):
-        self.ascensorEvent = ascensorEvent;
+    #def setAscensorState(self, ascensorEvent: EventsEnum):
+     #   self.ascensorEvent = ascensorEvent
 
     def treatEvent(self, event: Event):
-        if event.tipus == EventsEnum.MOVING:
+        if event.type == TransitionsEnum.CALL:
             self.startMoving(event)
 
-        elif event.tipus == EventsEnum.ENTITY_TRANSFER:
+        elif event.type == TransitionsEnum.FINISH_SERVICE:
             self.startEntityTransfer(event)
 
-        elif event.tipus == EventsEnum.BROKEN:
+        elif event.type == TransitionsEnum.BREAK:
             self.startBroken(event)
 
-        elif event.tipus == EventsEnum.IDLE:
+        elif event.type == TransitionsEnum.DOORS_CLOSED:
             self.startIdle(event)
 
-        elif event.tipus == EventsEnum.OUT_OF_SERVICE:
+        elif event.type == TransitionsEnum.ALL_FIXED:
             self.startOutOfService(event)
-
-        elif event.tipus == 'END_SERVICE':
-            self.processarFiServei(event)
+        elif event.type == TransitionsEnum.FIX:
+            self.startFix(event)
+        elif event.type == TransitionsEnum.ONE_BROKEN:
+            self.startOneBroken(event)
 
     def createConnection(self, server2, queue):
         self.queue = queue
@@ -54,27 +52,26 @@ class Elevator:
         self.programarFinalServei(time, entitat)
 
     def startMoving(self):
-        self.state = EventsEnum.MOVING
-        self.entitatsTractades = 0
+        self.state = ElevatorState.MOVING
 
     def startEntityTransfer(self):
-        self.state = EventsEnum.ENTITY_TRANSFER
+        self.state = ElevatorState.ENTITY_TRANSFER
         self.entitatsTractades = 0
 
     def startBroken(self):
-        self.state = EventsEnum.BROKEN
+        self.state = ElevatorState.BROKEN
         self.entitatsTractades = 0
 
     def startIdle(self):
-        self.state = EventsEnum.IDLE
+        self.state = ElevatorState.IDLE
         self.entitatsTractades = 0
 
     def startOutOfService(self, event):
-        self.state = enumeracions.OUT_OF_SERVICE
+        self.state = ElevatorState.OUT_OF_SERVICE
         self.entitatsTractades = 0
 
     def simulationStart(self, event):
-        self.state = enumeracions.idle
+        self.state = ElevatorState.idle
         self.entitatsTractades = 0
 
     def programarFinalServei(self, time, entitat):
@@ -82,7 +79,7 @@ class Elevator:
         tempsServei = 1  # _alguna_funcio ()
         # incrementem estadistics si s'escau
         self.entitatsTractades = self.entitatsTractades + 1
-        self.state = enumeracions.busy
+        self.state = ElevatorState.busy
         # programació final servei
         return Event(self, 'END_SERVICE', time + tempsServei, entitat)
 
@@ -97,4 +94,13 @@ class Elevator:
         #    if (queue.estat == enumeracions.idle):
         #        queue.recullEntitat(event.time, event.entitat)
 
-        self.estat = enumeracions.idle
+        self.estat = ElevatorState.IDLE
+
+    def startFix(self, event):
+        self.state = ElevatorState.IDLE
+        self.entitatsTractades = 0
+
+
+    # Esto tiene que ir en la herencia
+    #def startOneBroken(self, event):
+     #   self.state = ElevatorState.IDLE
