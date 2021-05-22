@@ -1,7 +1,4 @@
-import enum
 
-
-from Event import *
 from enumeracions import *
 
 
@@ -31,30 +28,10 @@ class Elevator:
         self.cyclesToBreak = cyclesToBreak
         self.currentCycles = 0
         self.state = ElevatorState.IDLE
-        self.floor = 0
+        self.currentLevel = 0
 
     def setElevatorState(self, ascensorEvent: ElevatorState):
         self.ascensorEvent = ascensorEvent;
-
-    def treatEvent(self, event: Event):
-        if event.type == TransitionsEnum.CALL:
-            self.startMoving(event)
-
-        elif event.type == TransitionsEnum.FINISH_SERVICE:
-            self.startEntityTransfer(event)
-
-        elif event.type == TransitionsEnum.BREAK:
-            self.startBroken(event)
-
-        elif event.type == TransitionsEnum.DOORS_CLOSED:
-            self.startIdle(event)
-
-        elif event.type == TransitionsEnum.ALL_FIXED:
-            self.startOutOfService(event)
-        elif event.type == TransitionsEnum.FIX:
-            self.startFix(event)
-        elif event.type == TransitionsEnum.ONE_BROKEN:
-            self.startOneBroken(event)
 
     def createConnection(self, server2, queue):
         self.queue = queue
@@ -82,19 +59,6 @@ class Elevator:
     def startOutOfService(self, event):
         self.state = ElevatorState.OUT_OF_SERVICE
         self.entitatsTractades = 0
-
-    def simulationStart(self, event):
-        self.state = ElevatorState.idle
-        self.entitatsTractades = 0
-
-    def programarFinalServei(self, time, entitat):
-        # que triguem a fer un servei (aleatorietat)
-        tempsServei = 1  # _alguna_funcio ()
-        # incrementem estadistics si s'escau
-        self.entitatsTractades = self.entitatsTractades + 1
-        self.state = enumeracions.busy
-        # programació final servei
-        return Event(self, 'END_SERVICE', time + tempsServei, entitat)
 
     def processarFiServei(self, event):
         # Registrar estadístics
