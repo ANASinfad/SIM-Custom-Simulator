@@ -23,7 +23,7 @@ class Source:
 
     def simulationStart(self,event):
         nouEvent=self.properaArribada(0)
-        self.scheduler.afegirEsdeveniment(nouEvent)
+        self.scheduler.addEvent(nouEvent)
 
     def processNextArrival(self,event):
         # Cal crear l'entitat 
@@ -37,7 +37,7 @@ class Source:
             ...
         # Cal programar la següent arribada
         nouEvent=self.properaArribada(event.temps)
-        self.scheduler.afegirEsdeveniment(nouEvent)
+        self.scheduler.addEvent(nouEvent)
 
     def properaArribada(self, time):
         # cada quan generem una arribada (aleatorietat)

@@ -19,6 +19,7 @@ class TransitionsEnum(enum.Enum):
     DOORS_CLOSED = 3
     ONE_BROKEN = 4
     ALL_FIXED = 5
+    CALL = 6
 
 
 class Elevator:
@@ -72,3 +73,7 @@ class Elevator:
         #        queue.recullEntitat(event.time, event.entitat)
 
         self.estat = enumeracions.idle
+
+    def getCallEvent(self):
+        return TransitionsEnum.CALL
+

@@ -1,7 +1,5 @@
 import time
 
-from enumeracions import *
-
 
 class TimeManager:
     def __init__(self):

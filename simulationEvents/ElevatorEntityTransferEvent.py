@@ -13,5 +13,5 @@ class ElevatorEntityTransferEvent(Event):
     def treatEvent(self):
         entityTransferTime = int(round(random.exponential(3 * 1000)))
         newEvent = ElevatorIdleEvent(self.simulationManager, self.entity, entityTransferTime + self.simulationManager.timeManager.getCurrentTimeInMillis())
-        self.simulationManager.eventsManager.afegirEsdeveniment(newEvent)
+        self.simulationManager.eventsManager.addEvent(newEvent)
         print("entity transfer at ", self.simulationManager.timeManager.getCurrentTimeInMillis())

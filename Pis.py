@@ -1,8 +1,10 @@
 from enumeracions import *
 
+
 class PisState(enum.Enum):
     NOT_EMPTY = 0
     EMPTY = 1
+
 
 class Pis:
 

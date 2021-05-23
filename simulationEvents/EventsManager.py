@@ -1,16 +1,26 @@
-import time
-
-from enumeracions import *
-
-
 class EventsManager:
     def __init__(self):
         self.eventList = []
 
-    def afegirEsdeveniment(self, event):
+    def addEvent(self, event):
         # inserir esdeveniment de forma ordenada
-        self.eventList.append(event)
+        if len(self.eventList) == 0:
+            self.eventList.append(event)
+            pass
+        i = 0
+        j = -1
+        while i < len(self.eventList) and j == -1:
+            if self.eventList[i].time > event.time:
+                j = i
+            else:
+                i += 1
+        self.eventList.insert(j, event)
 
-    def eliminarEsdeveniment(self, event):
+    def deleteEvent(self, event):
         # inserir esdeveniment de forma ordenada
         self.eventList.remove(event)
+
+    def getNextEvent(self):
+        if len(self.eventList) > 0:
+            return self.eventList[0]
+        return None

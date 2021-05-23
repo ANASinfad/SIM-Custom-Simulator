@@ -15,14 +15,14 @@ class ElevatorMovingEvent(Event):
         #cast the entity to elevator
         elevator = Elevator(self.entity)
         elevator.setElevatorState(ElevatorState.MOVING)
-        levelDestination = random.randint(0, self.simulationManager.numberOfLevels - 1);
-        if (elevator == self.simulationManager.elevators[0]):
+        levelDestination = random.randint(0, self.simulationManager.numberOfLevels - 1)
+        if elevator == self.simulationManager.elevators[0]:
             if levelDestination % 2 == 1:
                 if levelDestination != self.simulationManager.numberOfLevels:
                     levelDestination -= 1
                 else:
                     levelDestination += 1
-        elif (elevator == self.simulationManager.elevators[1]):
+        elif elevator == self.simulationManager.elevators[1]:
             if levelDestination % 2 == 0:
                 if levelDestination == self.simulationManager.numberOfLevels:
                     levelDestination -= 1
@@ -31,5 +31,5 @@ class ElevatorMovingEvent(Event):
 
         levelsToMove = abs(elevator.currentLevel - levelDestination)
         timeToMove = levelsToMove * self.simulationManager.elevatorMovingTime * 1000
-        self.simulationManager.eventsManager.afegirEsdeveniment(ElevatorEntityTransferEvent(self.simulationManager, self.entity, self.simulationManager.timeManager.getCurrentTimeInMillis() + timeToMove))
+        self.simulationManager.eventsManager.addEvent(ElevatorEntityTransferEvent(self.simulationManager, self.entity, self.simulationManager.timeManager.getCurrentTimeInMillis() + timeToMove))
         print("elevator starts moving at ", self.simulationManager.timeManager.getCurrentTimeInMillis(), " for ", timeToMove, " ms")
