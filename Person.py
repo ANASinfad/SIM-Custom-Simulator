@@ -1,3 +1,3 @@
 class Person:
-    def __init__(self):
-        print("Persona Creada")
+    def __init__(self, id):
+        self.id = id

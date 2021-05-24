@@ -3,7 +3,6 @@ CONST_DEFAULT_MTF1 = 100
 CONST_DEFAULT_MTF2 = 200
 CONST_DEFAULT_MTF3 = 300
 CONST_DEFAULT_NUMBER_LEVELS = 10
-CONST_DEFAULT_SCALE_LEVEL = 1
 
 
 # this class holds the input information of the user
@@ -35,12 +34,11 @@ class InputModule:
             print('el numero de pisos se asignará por defecto')
             self.numberOfLevels = CONST_DEFAULT_NUMBER_LEVELS
 
-        respuesta = YesNoQuestion('¿Desea una escala para el tiempo transcurrido?')
+        respuesta = YesNoQuestion('¿Desea simular en tiempo real?')
         if respuesta == "si":
-            self.timeScale = int(input('indique los segundos que pasaran por cada segundo de simulación '))
+            self.instantSimulation = 0
         else:
-            print('el tiempo tendrá escala 1:1')
-            self.timeScale = CONST_DEFAULT_SCALE_LEVEL
+            self.instantSimulation = 1
 
         print()
 

@@ -1,4 +1,4 @@
-from enumeracions import *
+import enum
 
 
 class PisState(enum.Enum):
@@ -10,8 +10,11 @@ class Pis:
 
     def __init__(self, numero):
         self.numero = 0
-        self.personas = []
+        self.people = []
         self.state = PisState.EMPTY
 
     def setPisState(self, state: PisState):
         self.state = state
+
+    def releaseEntities(self):
+        self.people = []

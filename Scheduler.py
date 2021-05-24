@@ -1,8 +1,9 @@
 from EntityGenerator import EntityGenerator
 from Pis import *
 from SimulatorManager import SimulatorManager
-from TimeManager import TimeManager
 from simulationEvents.Event import Event
+from simulationEvents.EventsManager import EventStatus
+from simulationEvents.LevelNewArrivalEvent import LevelNewArrivalEvent
 
 
 class Scheduler:
@@ -10,7 +11,6 @@ class Scheduler:
     # Inicialització de la classe scheduler
     def __init__(self):
         self.simulatorManager = SimulatorManager()
-        self.treatedEvents = []
 
         self.entityGenerator = EntityGenerator(self.simulatorManager)
         self.simulatorManager.initElevators()
@@ -22,10 +22,18 @@ class Scheduler:
         self.entityGenerator.generateEntity()
 
         while self.simulatorManager.simulationNotFinished():
-            nextEvent = self.simulatorManager.getNextEvent()
-            nextEvent.treatEvent()
-            self.treatedEvents.append(nextEvent)
-            self.deleteEvent(nextEvent)
+            eventResult = EventStatus.PENDING
+            nextEvent = self.simulatorManager.getFirstEvent()
+            # if it's not the last element of the list and we cannot treat it,
+            while nextEvent != None and (eventResult == EventStatus.PENDING or nextEvent == self.simulatorManager.getLastEvent()):
+                if self.simulatorManager.eventIsInTime(nextEvent.time):
+                    eventResult = nextEvent.treatEvent()
+                    if eventResult == EventStatus.TREATED:
+                        if isinstance(nextEvent, LevelNewArrivalEvent):
+                            self.entityGenerator.generateEntity()
+                        self.deleteEvent(nextEvent)
+                nextEvent = self.simulatorManager.getNextEvent()
+
             #for event in self.simulatorManager.eventsManager.eventList:
              #   if event.time <= self.simulatorManager.timeManager.getCurrentTimeInMillis():
               #      self.tractarEsdeveniment(event)
@@ -37,7 +45,6 @@ class Scheduler:
             # all the events treated are removed from the list
             # for event in treatedEvents:
              #   self.deleteEvent(event)
-
 
         # self.currentTime=0
         # bucle de simulació (condició fi simulació llista buida)
@@ -69,21 +76,6 @@ class Scheduler:
         # eliminar esdeveniment seleccionat
         self.simulatorManager.eventsManager.deleteEvent(event)
 
-    # comunicar a tots els objectes que cal preparar-se
-    def tractarEsdeveniment(self, event: Event):
-        if (event.time < self.simulatorManager.timeManager.maxTime):
-            # si encara no s'acaba la simulació, l'esdeveniment es processa
-
-            if (event.type == "SIMULATION_START"):
-                print("preparant esdeveniment!")
-
-            if (event.type == PisState.NOT_EMPTY):
-                newEvent = self.entityGenerator.generateEntity(
-                    self.simulatorManager.timeManager.getCurrentTimeInMillis())
-                self.afegirEsdeveniment(newEvent)
-                print("Arriba un pipiolo a l'ascensor")
-            else:
-                event.treatEvent()
 
 
 if __name__ == "__main__":

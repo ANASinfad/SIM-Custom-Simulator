@@ -1,6 +1,5 @@
 #millor treballar amb define o algun sistema simular a l'enum de C++
 from Server import *
-from enumeracions import *
 
 class Source:
 
