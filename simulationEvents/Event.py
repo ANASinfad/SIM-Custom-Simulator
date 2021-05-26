@@ -1,11 +1,12 @@
 import enum
 
 from SimulatorManager import SimulatorManager
+from TimeManager import SimulationTime
 
 
 class Event:
     # creació d'un nou esdeveniment
-    def __init__(self, simulatorManager: SimulatorManager, entity, eventType: enum, time):
+    def __init__(self, simulatorManager: SimulatorManager, entity, eventType: enum, time: SimulationTime):
         # objecte que processarà l'esdeveniment
         self.entity = entity
         # type event

@@ -25,12 +25,12 @@ class SimulatorManager:
         self.elevators.append(Elevator("OddElevator", self.inputModule.MTF2))
         self.elevators.append(Elevator("AuxElevator", self.inputModule.MTF3))
 
-    # self.elevators[2].state = ElevatorState.OUT_OF_SERVICE
-    def addEvent(self, newEvent):
-        self.eventsManager.addEvent(newEvent)
 
     def simulationNotFinished(self):
-        return self.timeManager.getCurrentTimeInMillis() < self.timeManager.maxTime
+        if self.timeManager.instantSimulation:
+            #check if the first element of the list
+            return not self.timeManager.isOutOfTime(self.eventsManager.getFirstEvent().time)
+        return not self.timeManager.isOutOfTime(self.timeManager.getCurrentTime())
 
     def getNextEvent(self):
         return self.eventsManager.getNextEvent()
@@ -43,3 +43,17 @@ class SimulatorManager:
 
     def eventIsInTime (self, eventTime):
         return self.timeManager.eventIsInTime(eventTime)
+
+    def addEvent(self, event):
+        # inserir esdeveniment de forma ordenada
+        if len(self.eventsManager.eventList) == 0:
+            self.eventsManager.eventList.append(event)
+            return
+        i = 0
+        j = -1
+        while i < len(self.eventsManager.eventList) and j == -1:
+            if self.timeManager.isTimeLowerThanTime(event.time, self.eventsManager.eventList[i].time):
+                j = i
+            else:
+                i += 1
+        self.eventsManager.eventList.insert(j, event)

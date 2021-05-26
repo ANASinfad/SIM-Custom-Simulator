@@ -16,6 +16,6 @@ class LevelNewArrivalEvent(Event):
     def treatEvent(self):
         self.entity.people.append(self.person)
         if len( self.entity.people) == 1:
-            self.simulatorManager.eventsManager.addEvent(ElevatorCallEvent(self.simulatorManager, self.entity, self.time, self.levelDestination))
-            print(len(self.entity.people), "people in the level", self.levelDestination,  "at", self.time)
+            self.simulatorManager.addEvent(ElevatorCallEvent(self.simulatorManager, self.entity, self.time, self.levelDestination))
+            print(len(self.entity.people), "people in the level", self.levelDestination,  "at", self.time.getString())
         return EventStatus.TREATED

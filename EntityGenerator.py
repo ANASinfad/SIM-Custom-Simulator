@@ -15,12 +15,20 @@ class EntityGenerator:
         self.numberOfLevels = len(simulatorManager.floors)
         self.simulatorManager = simulatorManager
 
-    def generateEntity(self):
-        nextArrival = int(round(random.exponential(2 * 60 * 1000)))
+    def generateFirstEntity(self):
+        self.newArrivalEvent(self.simulatorManager.timeManager.getCurrentTime())
+
+    def generateEntity(self, time):
+        self.newArrivalEvent(time)
+
+    def newArrivalEvent(self, time):
+        nextArrival = int(round(random.exponential(30)))
         level = random.randint(0, self.numberOfLevels - 1)
 
-        newEvent = LevelNewArrivalEvent(self.simulatorManager, self.simulatorManager.floors[level],
-                                        nextArrival + self.simulatorManager.timeManager.getCurrentTimeInMillis(), level, Person(self.entitiesGenerated))
+        newEvent = LevelNewArrivalEvent(
+            self.simulatorManager, self.simulatorManager.floors[level], self.simulatorManager.timeManager.addTime(
+                        time, nextArrival, 0, 0, 0, 0, 0),
+                        level, Person(self.entitiesGenerated))
         self.entitiesGenerated += 1
 
         self.simulatorManager.addEvent(newEvent)

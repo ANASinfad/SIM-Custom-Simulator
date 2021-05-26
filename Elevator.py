@@ -33,6 +33,7 @@ class Elevator:
         self.currentLevel = 0
         self.people = []
 
+
     def setElevatorState(self, state: ElevatorState):
         self.state = state;
 
@@ -53,3 +54,6 @@ class Elevator:
 
     def getCurrentLevel(self):
         return self.currentLevel
+
+    def cycleCompleted(self):
+        self.currentCycles += 1

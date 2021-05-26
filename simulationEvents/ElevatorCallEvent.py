@@ -1,12 +1,13 @@
 from Elevator import Elevator, ElevatorState, TransitionsEnum
 from SimulatorManager import SimulatorManager
+from TimeManager import SimulationTime
 from simulationEvents.ElevatorMovingEvent import ElevatorMovingEvent
 from simulationEvents.Event import Event
 from simulationEvents.EventsManager import EventStatus
 
 
 class ElevatorCallEvent(Event):
-    def __init__(self, simulatorManager: SimulatorManager, entity, time, levelDestination):
+    def __init__(self, simulatorManager: SimulatorManager, entity, time: SimulationTime, levelDestination):
         super().__init__(simulatorManager, entity, TransitionsEnum.CALL, time)
         self.levelDestination = levelDestination
 
@@ -24,9 +25,9 @@ class ElevatorCallEvent(Event):
 
     def checkIfIdleAndCreateEvent(self, elevator: Elevator):
         if elevator.state == ElevatorState.IDLE:
-            self.simulatorManager.eventsManager.addEvent(
+            self.simulatorManager.addEvent(
                 ElevatorMovingEvent(self.simulatorManager, elevator,
-                                    self.simulatorManager.timeManager.getCurrentTimeInMillis(), self.levelDestination))
+                                    self.time, self.levelDestination))
             return EventStatus.TREATED
         else:
             return EventStatus.PENDING

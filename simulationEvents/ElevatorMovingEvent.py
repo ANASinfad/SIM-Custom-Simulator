@@ -2,13 +2,14 @@ from numpy import random
 
 from Elevator import Elevator, ElevatorState
 from SimulatorManager import SimulatorManager
+from TimeManager import SimulationTime
 from simulationEvents.ElevatorEntityTransferEvent import ElevatorEntityTransferEvent
 from simulationEvents.Event import Event
 from simulationEvents.EventsManager import EventStatus
 
 
 class ElevatorMovingEvent(Event):
-    def __init__(self, simulatorManager: SimulatorManager, entity, time, levelDestination):
+    def __init__(self, simulatorManager: SimulatorManager, entity, time: SimulationTime, levelDestination):
         super().__init__(simulatorManager, entity, ElevatorState.MOVING, time)
         self.levelDestination = levelDestination
 
@@ -18,11 +19,15 @@ class ElevatorMovingEvent(Event):
             self.entity.setElevatorState(ElevatorState.MOVING)
 
             levelsToMove = abs(self.entity.currentLevel - self.levelDestination)
-            timeToMove = levelsToMove * self.simulatorManager.elevatorMovingTime * 1000
+            secondsToMove = abs(levelsToMove * self.simulatorManager.elevatorMovingTime)
+            minutesToMove = int(secondsToMove / 60)
+            secondsToMove = secondsToMove % 60
 
             # once the elevator starts moving, we consider it will reach the level destination
             self.entity.setCurrentLevel(self.levelDestination)
-            self.simulatorManager.eventsManager.addEvent(ElevatorEntityTransferEvent(self.simulatorManager, self.entity, self.time + timeToMove))
-            print(self.entity.name, "starts moving at ", self.time, " for ", timeToMove, " ms to", self.levelDestination)
+            self.simulatorManager.addEvent(ElevatorEntityTransferEvent(
+                self.simulatorManager, self.entity, self.simulatorManager.timeManager.addTime(
+                    self.time, secondsToMove, minutesToMove, 0, 0, 0, 0)))
+            print(self.entity.name, "starts moving at ", self.time.getString(), " for ", secondsToMove, " seconds to", self.levelDestination)
             return EventStatus.TREATED
         return EventStatus.PENDING

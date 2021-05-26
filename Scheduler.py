@@ -19,7 +19,7 @@ class Scheduler:
 
 
         # para generar una entidad(persona) // hay que enviar la señal de simulation_start
-        self.entityGenerator.generateEntity()
+        self.entityGenerator.generateFirstEntity()
 
         while self.simulatorManager.simulationNotFinished():
             eventResult = EventStatus.PENDING
@@ -30,10 +30,10 @@ class Scheduler:
                     eventResult = nextEvent.treatEvent()
                     if eventResult == EventStatus.TREATED:
                         if isinstance(nextEvent, LevelNewArrivalEvent):
-                            self.entityGenerator.generateEntity()
+                            self.entityGenerator.generateEntity(nextEvent.time)
                         self.deleteEvent(nextEvent)
                 nextEvent = self.simulatorManager.getNextEvent()
-
+        print ("simulation finished")
             #for event in self.simulatorManager.eventsManager.eventList:
              #   if event.time <= self.simulatorManager.timeManager.getCurrentTimeInMillis():
               #      self.tractarEsdeveniment(event)
