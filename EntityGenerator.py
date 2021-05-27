@@ -23,7 +23,7 @@ class EntityGenerator:
 
     def newArrivalEvent(self, time):
         nextArrival = int(round(random.exponential(30)))
-        level = random.randint(0, self.numberOfLevels - 1)
+        level = random.randint(0, self.numberOfLevels)
 
         newEvent = LevelNewArrivalEvent(
             self.simulatorManager, self.simulatorManager.floors[level], self.simulatorManager.timeManager.addTime(

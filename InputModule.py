@@ -1,3 +1,5 @@
+from TimeManager import SimulationTime
+
 CONST_DEFAULT_TRANSPORT_TIME = 5
 CONST_DEFAULT_MTF1 = 100
 CONST_DEFAULT_MTF2 = 200
@@ -46,10 +48,13 @@ class InputModule:
             days = int(input('indique el numero de dias de simulación (a continuación podrá escojer tiempos menores): '))
             hours = int(input('indique el numero de horas de simulación (a continuación podrá escojer tiempos menores): '))
             minutes = int(input('indique el numero de minutos de simulación: '))
+            self.simulationTime = SimulationTime()
+            self.simulationTime.setTimeByParameters(0, minutes, hours, days, months, 0)
 
         else:
             print('el tiempo de simulación se asignará por defecto')
-            self.simulationTime = 1
+            self.simulationTime = SimulationTime()
+            self.simulationTime.setTimeByParameters(0, 0, 0, 1, 0, 0)
 
         print()
 

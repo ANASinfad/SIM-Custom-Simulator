@@ -15,10 +15,11 @@ class SimulatorManager:
         self.numberOfLevels = self.inputModule.numberOfLevels
         self.elevatorMovingTime = self.inputModule.ascensorTransportTime
         self.timeManager.setInstantSimulation(self.inputModule.instantSimulation)
+        self.timeManager.setSimulationTime(self.inputModule.simulationTime)
         self.elevators = []
         self.floors = []
         for i in range(0, self.inputModule.numberOfLevels):
-            self.floors.append(Floor(i + 1))
+            self.floors.append(Floor(i))
 
     def initElevators(self):
         self.elevators.append(Elevator("PairElevator", self.inputModule.MTF1, self.timeManager.initialTime))

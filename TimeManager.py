@@ -62,7 +62,7 @@ class SimulationTime:
 class TimeManager:
     def __init__(self):
         self.initialTime = self.getCurrentTime()
-        self.maxTime = self.addTime(self.initialTime, 0, 0, 0, 1, 0, 0)
+        self.maxTime = self.getCurrentTime()
         self.instantSimulation = 0
 
     def getCurrentTime(self):
@@ -123,3 +123,8 @@ class TimeManager:
         if time1.currentSeconds < time2.currentSeconds:
             return 1
         return 0
+
+    def setSimulationTime(self, simulationTime):
+        self.maxTime = self.addTime(self.initialTime, simulationTime.currentSeconds, simulationTime.currentMinute,
+                                    simulationTime.currentHours, simulationTime.currentDays,
+                                    simulationTime.currentMonths, simulationTime.currentYears)

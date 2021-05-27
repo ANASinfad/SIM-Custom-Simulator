@@ -20,6 +20,7 @@ class StatisticsManager:
             print("floor", floor.level, "max people waiting:", floor.maxPeopleWaiting)
             floorName ="floor " + str(floor.level)
             maxPeopleWaitingInFloors.append(floor.maxPeopleWaiting)
+
         params = {"y": maxPeopleWaitingInFloors}
         fig = go.Figure(go.Bar(params))
         fig.write_html('figures/first_figure.html', True)
