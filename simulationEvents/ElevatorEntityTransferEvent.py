@@ -14,10 +14,14 @@ class ElevatorEntityTransferEvent(Event):
         super().__init__(simulatorManager, entity, ElevatorState.ENTITY_TRANSFER, time)
 
     def treatEvent(self):
-        entityTransferTime = int(round(random.exponential(3)))
         #seconds
         if self.entity.state == ElevatorState.MOVING:
-            self.entity.setElevatorState(ElevatorState.ENTITY_TRANSFER)
+
+            entityTransferTime = int(round(random.exponential(3)))
+            eventTime = self.simulatorManager.timeManager.addTime(
+                                                 self.time, entityTransferTime, 0, 0, 0, 0, 0)
+
+            self.entity.setElevatorState(ElevatorState.ENTITY_TRANSFER, self.time)
             # release elevator entities and pick new ones
             self.entity.releaseEntities()
             self.entity.pickEntities(self.simulatorManager.floors[self.entity.getCurrentLevel()])
@@ -25,16 +29,12 @@ class ElevatorEntityTransferEvent(Event):
             # does the elevator break?
             notBreak = random.randint(0, self.entity.cyclesToBreak - 1)
             if notBreak:
-                newEvent = ElevatorIdleEvent(self.simulatorManager, self.entity,
-                                             self.simulatorManager.timeManager.addTime(
-                                                 self.time, entityTransferTime, 0, 0, 0, 0, 0))
+                newEvent = ElevatorIdleEvent(self.simulatorManager, self.entity, eventTime)
             else:
-                newEvent = ElevatorBrokenEvent(self.simulatorManager, self.entity,
-                                               self.simulatorManager.timeManager.addTime(
-                                                   self.time, entityTransferTime, 0, 0, 0, 0, 0))
+                newEvent = ElevatorBrokenEvent(self.simulatorManager, self.entity, eventTime)
 
             self.simulatorManager.addEvent(newEvent)
 
-            print(self.entity.name, "entity transfer at ",  self.time.getString())
+            print(self.entity.name, "entity transfer at ", self.time.getDateAsString())
             return EventStatus.TREATED
         return EventStatus.PENDING

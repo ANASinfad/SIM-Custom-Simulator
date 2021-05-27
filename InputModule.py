@@ -40,6 +40,17 @@ class InputModule:
         else:
             self.instantSimulation = 1
 
+        respuesta = YesNoQuestion('¿Desea seleccionar un tiempo de simulación? Por defecto el tiempo será un dia')
+        if respuesta == "si":
+            months = int(input('indique el numero de meses de simulación (a continuación podrá escojer tiempos menores): '))
+            days = int(input('indique el numero de dias de simulación (a continuación podrá escojer tiempos menores): '))
+            hours = int(input('indique el numero de horas de simulación (a continuación podrá escojer tiempos menores): '))
+            minutes = int(input('indique el numero de minutos de simulación: '))
+
+        else:
+            print('el tiempo de simulación se asignará por defecto')
+            self.simulationTime = 1
+
         print()
 
     def showParameters(self):

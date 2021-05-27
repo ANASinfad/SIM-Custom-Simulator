@@ -11,7 +11,7 @@ class ElevatorIdleEvent(Event):
 
     def treatEvent(self):
         if self.entity.state == ElevatorState.ENTITY_TRANSFER:
-            self.entity.setElevatorState(ElevatorState.IDLE)
-            print (self.entity.name, "idle at ", self.time.getString())
+            self.entity.setElevatorState(ElevatorState.IDLE, self.time)
+            print (self.entity.name, "idle at ", self.time.getDateAsString())
             return EventStatus.TREATED
         return EventStatus.PENDING

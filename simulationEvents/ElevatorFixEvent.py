@@ -14,8 +14,8 @@ class ElevatorFixEvent(Event):
 
     def treatEvent(self):
         if self.entity.state == ElevatorState.BROKEN:
-            self.entity.setElevatorState(ElevatorState.IDLE)
-            print(self.entity.name, "fixed at ", self.time.getString())
+            self.entity.setElevatorState(ElevatorState.IDLE, self.time)
+            print(self.entity.name, "fixed at ", self.time.getDateAsString())
             if self.simulatorManager.elevators[0].state != ElevatorState.BROKEN and \
                     self.simulatorManager.elevators[1].state != ElevatorState.BROKEN:
                 newEvent = ElevatorOutOfServiceEvent(self.simulatorManager, self.simulatorManager.elevators[2],

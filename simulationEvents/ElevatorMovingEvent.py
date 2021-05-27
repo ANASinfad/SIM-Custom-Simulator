@@ -16,7 +16,7 @@ class ElevatorMovingEvent(Event):
     def treatEvent(self):
         #cast the entity to elevator
         if (self.entity.state == ElevatorState.IDLE):
-            self.entity.setElevatorState(ElevatorState.MOVING)
+            self.entity.setElevatorState(ElevatorState.MOVING, self.time)
 
             levelsToMove = abs(self.entity.currentLevel - self.levelDestination)
             secondsToMove = abs(levelsToMove * self.simulatorManager.elevatorMovingTime)
@@ -28,6 +28,6 @@ class ElevatorMovingEvent(Event):
             self.simulatorManager.addEvent(ElevatorEntityTransferEvent(
                 self.simulatorManager, self.entity, self.simulatorManager.timeManager.addTime(
                     self.time, secondsToMove, minutesToMove, 0, 0, 0, 0)))
-            print(self.entity.name, "starts moving at ", self.time.getString(), " for ", secondsToMove, " seconds to", self.levelDestination)
+            print(self.entity.name, "starts moving at ", self.time.getDateAsString(), " for ", secondsToMove, " seconds to", self.levelDestination)
             return EventStatus.TREATED
         return EventStatus.PENDING

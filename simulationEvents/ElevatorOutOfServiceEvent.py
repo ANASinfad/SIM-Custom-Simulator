@@ -14,7 +14,7 @@ class ElevatorOutOfServiceEvent(Event):
 
     def treatEvent(self):
         if self.entity.state == ElevatorState.IDLE:
-            self.entity.setElevatorState(ElevatorState.OUT_OF_SERVICE)
-            print(self.entity.name, "is out of service at", self.time.getString())
+            self.entity.setElevatorState(ElevatorState.OUT_OF_SERVICE, self.time)
+            print(self.entity.name, "is out of service at", self.time.getDateAsString())
             return EventStatus.TREATED
         return EventStatus.PENDING

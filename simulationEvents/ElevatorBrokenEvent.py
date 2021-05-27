@@ -15,17 +15,17 @@ class ElevatorBrokenEvent(Event):
 
     def treatEvent(self):
         if self.entity.state == ElevatorState.ENTITY_TRANSFER:
-            self.entity.setElevatorState(ElevatorState.BROKEN)
+            self.entity.setElevatorState(ElevatorState.BROKEN, self.time)
             entityFixingMinutes = int(round(random.exponential(60)))
             entityFixingHours = int(entityFixingMinutes / 60)
             entityFixingMinutes = entityFixingMinutes % 60
             #minutes
-            print(self.entity.name, "broken at at ",  self.time.getString(),
+            print(self.entity.name, "broken at at ", self.time.getDateAsString(),
                   "with", self.entity.currentCycles, "cycles")
-
+            self.entity.timesBroken += 1
             if self.simulatorManager.elevators[2].state == ElevatorState.OUT_OF_SERVICE:
-                self.simulatorManager.elevators[2].setElevatorState(ElevatorState.IDLE)
-                print(self.simulatorManager.elevators[2].name, " is now available at ", self.time.getString())
+                self.simulatorManager.elevators[2].setElevatorState(ElevatorState.IDLE, self.time)
+                print(self.simulatorManager.elevators[2].name, " is now available at ", self.time.getDateAsString())
 
             newEvent = ElevatorFixEvent(self.simulatorManager, self.entity, self.simulatorManager.timeManager.addTime(
                 self.time, 0, entityFixingMinutes, entityFixingHours, 0, 0, 0))

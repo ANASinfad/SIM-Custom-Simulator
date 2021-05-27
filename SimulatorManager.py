@@ -1,6 +1,6 @@
-from Elevator import Elevator
+from Elevator import Elevator, ElevatorState
 from InputModule import InputModule
-from Pis import Pis
+from Floor import Floor
 from TimeManager import TimeManager
 from simulationEvents.EventsManager import EventsManager
 
@@ -18,13 +18,13 @@ class SimulatorManager:
         self.elevators = []
         self.floors = []
         for i in range(0, self.inputModule.numberOfLevels):
-            self.floors.append(Pis(i + 1))
+            self.floors.append(Floor(i + 1))
 
     def initElevators(self):
-        self.elevators.append(Elevator("PairElevator", self.inputModule.MTF1))
-        self.elevators.append(Elevator("OddElevator", self.inputModule.MTF2))
-        self.elevators.append(Elevator("AuxElevator", self.inputModule.MTF3))
-
+        self.elevators.append(Elevator("PairElevator", self.inputModule.MTF1, self.timeManager.initialTime))
+        self.elevators.append(Elevator("OddElevator", self.inputModule.MTF2, self.timeManager.initialTime))
+        self.elevators.append(Elevator("AuxElevator", self.inputModule.MTF3, self.timeManager.initialTime))
+        self.elevators[2].setElevatorState(ElevatorState.OUT_OF_SERVICE, self.timeManager.initialTime)
 
     def simulationNotFinished(self):
         if self.timeManager.instantSimulation:
