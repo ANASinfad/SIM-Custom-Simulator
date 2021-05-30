@@ -5,14 +5,19 @@ from TimeManager import SimulationTime
 
 
 class ElevatorState(enum.Enum):
-    IDLE = 0
-    MOVING = 1
-    ENTITY_TRANSFER = 2
-    BROKEN = 3
+    IDLE = [0, "idle"]
+    MOVING = [1, "moving"]
+    ENTITY_TRANSFER = [2, "entity transfer"]
+    BROKEN = [3, "broken"]
 
     # This one only available for the 3rd elevator
-    OUT_OF_SERVICE = 4
+    OUT_OF_SERVICE = [4, "out of service"]
 
+    def getName(self):
+        return self.value[1]
+
+    def getNum(self):
+        return self.value[0]
 
 class TransitionsEnum(enum.Enum):
     REACH_DESTINATION = 0
@@ -46,20 +51,19 @@ class Elevator:
 
     def setElevatorState(self, state: ElevatorState, time: SimulationTime):
         # save state statistics
-        newDateTime = datetime.datetime(int(time.currentYears), int(time.currentMonths), int(time.currentDays),
-                                        int(time.currentHours), int(time.currentMinute), int(time.currentSeconds))
 
         stateTime = SimulationTime()
-        stateTime.setTimeByDatetime(newDateTime)
+        stateTime.setTimeByParameters(time.currentSeconds, time.currentMinute, time.currentHours, time.currentDays,
+                                      time.currentMonths, time.currentYears)
         stateTime.addTime(-self.lastStateTime.currentSeconds,
                                                         -self.lastStateTime.currentMinute,
                                                         -self.lastStateTime.currentHours,
                                                         -self.lastStateTime.currentDays,
                                                         -self.lastStateTime.currentMonths,
                                                         -self.lastStateTime.currentYears)
-        self.timeInState[self.state.value].addTime(stateTime.currentSeconds, stateTime.currentMinute,
+        self.timeInState[self.state.getNum()].addTime(stateTime.currentSeconds, stateTime.currentMinute,
                                              stateTime.currentHours, stateTime.currentDays,
-                                             stateTime.currentMonths, -self.lastStateTime.currentYears)
+                                             stateTime.currentMonths, stateTime.currentYears)
         self.lastStateTime = time
         self.state = state;
 

@@ -1,4 +1,6 @@
 import datetime
+import math
+import time
 
 
 class SimulationTime:
@@ -29,15 +31,25 @@ class SimulationTime:
         self.currentYears = currentYears
 
     def getDateAsString(self):
-        return str(self.currentMonths) + "th month, " + str(self.currentDays) + "th " + str(self.currentHours) \
+        return str(self.currentDays) + "/" + str(self.currentMonths) + "/" + str(self.currentYears) + " " + str(self.currentHours) \
                + ":" + str(self.currentMinute) + ":" + str(self.currentSeconds)
+
+    def getDateAsFileName(self):
+        return str(self.currentDays) + "_" + str(self.currentMonths) + "_" + str(self.currentYears) + "__" + str(self.currentHours) \
+               + "_" + str(self.currentMinute) + "_" + str(self.currentSeconds)
 
     def getTimeInHoursAndLower(self):
         months = self.currentMonths + self.currentYears * 12
         days = self.currentDays + months * 30
         hours = self.currentHours + days * 24
-        return str(self.currentHours) + " hours, " + str(self.currentMinute) + " minutes and " + \
+        return str(hours) + " hours, " + str(self.currentMinute) + " minutes and " + \
                str(self.currentSeconds) + " seconds"
+
+    def getTimeInHoursDouble(self):
+        months = self.currentMonths + self.currentYears * 12
+        days = self.currentDays + months * 30
+        hours = self.currentHours + days * 24
+        return hours + self.currentMinute / 60 + self.currentSeconds / 3600
 
     def addTime(self, s, minutes, h, d, m, y):
         # s >= 0 and < 60
@@ -46,15 +58,15 @@ class SimulationTime:
         # d >= 0 and < 30
         # y >= 0
         self.currentSeconds += s
-        self.currentMinute += int(self.currentSeconds / 60) + minutes
+        self.currentMinute += math.floor(self.currentSeconds / 60) + minutes
         self.currentSeconds = self.currentSeconds % 60
-        self.currentHours += int(self.currentMinute / 60) + h
+        self.currentHours += math.floor(self.currentMinute / 60) + h
         self.currentMinute = self.currentMinute % 60
-        self.currentDays += int(self.currentHours / 24) + d
+        self.currentDays += math.floor(self.currentHours / 24) + d
         self.currentHours = self.currentHours % 24
-        self.currentMonths += int(self.currentDays / 30) + m
+        self.currentMonths += math.floor(self.currentDays / 30) + m
         self.currentDays = self.currentDays % 30
-        self.currentYears += int(self.currentMonths / 12) + y
+        self.currentYears += math.floor(self.currentMonths / 12) + y
         self.currentMonths = self.currentMonths % 12
         return self
 
@@ -76,17 +88,21 @@ class TimeManager:
         # h >= 0 and < 24
         # d >= 0 and < 30
         # y >= 0
-        newDateTime = datetime.datetime(int(time.currentYears), int(time.currentMonths), int(time.currentDays),
-                                        int(time.currentHours), int(time.currentMinute), int(time.currentSeconds))
+
         result = SimulationTime()
-        result.setTimeByDatetime(newDateTime)
+        result.setTimeByParameters(time.currentSeconds, time.currentMinute, time.currentHours, time.currentDays,
+                                   time.currentMonths, time.currentYears)
         return result.addTime(s, minutes, h, d, m, y)
 
     def eventIsInTime(self, eventTime: SimulationTime):
         if self.instantSimulation:
             return 1
         currentTime = self.getCurrentTime()
-        return self.isTimeLowerThanTime(eventTime, currentTime)
+        timeToWait = self.addTime(eventTime, -currentTime.currentSeconds, -currentTime.currentMinute,
+                                  -currentTime.currentHours, -currentTime.currentDays, -currentTime.currentMonths,
+                                  -currentTime.currentYears)
+        self.sleepTime(timeToWait)
+        return 1
 
     def setInstantSimulation(self, instantSimulation):
         self.instantSimulation = instantSimulation
@@ -124,7 +140,25 @@ class TimeManager:
             return 1
         return 0
 
-    def setSimulationTime(self, simulationTime):
-        self.maxTime = self.addTime(self.initialTime, simulationTime.currentSeconds, simulationTime.currentMinute,
-                                    simulationTime.currentHours, simulationTime.currentDays,
-                                    simulationTime.currentMonths, simulationTime.currentYears)
+    def setSimulationTime(self, timeToWait: SimulationTime):
+        self.maxTime = self.addTime(self.initialTime, timeToWait.currentSeconds, timeToWait.currentMinute,
+                                    timeToWait.currentHours, timeToWait.currentDays,
+                                    timeToWait.currentMonths, timeToWait.currentYears)
+
+    def sleepTime(self, simulationTime):
+        time.sleep(simulationTime.currentSeconds + simulationTime.currentMinute*60 + simulationTime.currentHours * 3600)
+        self.sleepDays(simulationTime.currentDays)
+        self.sleepMonths(simulationTime.currentMonths)
+        self.sleepYears(simulationTime.currentYears)
+
+    def sleepYears(self, years):
+        for day in range(years):
+            self.sleepMonths(12)
+
+    def sleepMonths(self, months):
+        for day in range(months):
+            self.sleepDays(30)
+
+    def sleepDays(self, days):
+        for day in range(days):
+            time.sleep(24*3600)

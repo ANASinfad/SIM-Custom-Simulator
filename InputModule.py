@@ -5,6 +5,7 @@ CONST_DEFAULT_MTF1 = 100
 CONST_DEFAULT_MTF2 = 200
 CONST_DEFAULT_MTF3 = 300
 CONST_DEFAULT_NUMBER_LEVELS = 10
+CONST_DEFAULT_ARRIVAL_TIME = 20
 
 
 # this class holds the input information of the user
@@ -35,6 +36,13 @@ class InputModule:
         else:
             print('el numero de pisos se asignará por defecto')
             self.numberOfLevels = CONST_DEFAULT_NUMBER_LEVELS
+
+        respuesta = YesNoQuestion('¿Desea definir el tiempo medio de llegadas de personas?')
+        if respuesta == "si":
+            self.timeBetweenArrivals = int(input('indique el numero de segundos entre llegadas: '))
+        else:
+            print('el numero de pisos se asignará por defecto')
+            self.timeBetweenArrivals = CONST_DEFAULT_ARRIVAL_TIME
 
         respuesta = YesNoQuestion('¿Desea simular en tiempo real?')
         if respuesta == "si":
