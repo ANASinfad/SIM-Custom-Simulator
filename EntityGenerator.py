@@ -8,12 +8,12 @@ from simulationEvents.LevelNewArrivalEvent import LevelNewArrivalEvent
 
 
 class EntityGenerator:
-    CONST_SPWAN_TIME = 60
 
     def __init__(self, simulatorManager: SimulatorManager):
         self.entitiesGenerated = 0
         self.numberOfLevels = len(simulatorManager.floors)
         self.simulatorManager = simulatorManager
+        self.spawnTime = simulatorManager.inputModule.timeBetweenArrivals
 
     def generateFirstEntity(self):
         self.newArrivalEvent(self.simulatorManager.timeManager.getCurrentTime())
@@ -22,7 +22,7 @@ class EntityGenerator:
         self.newArrivalEvent(time)
 
     def newArrivalEvent(self, time):
-        nextArrival = int(round(random.exponential(30)))
+        nextArrival = int(abs(round(random.exponential(self.spawnTime))))
         level = random.randint(0, self.numberOfLevels)
 
         newEvent = LevelNewArrivalEvent(

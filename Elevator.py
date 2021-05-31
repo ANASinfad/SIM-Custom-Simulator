@@ -52,19 +52,25 @@ class Elevator:
     def setElevatorState(self, state: ElevatorState, time: SimulationTime):
         # save state statistics
 
-        stateTime = SimulationTime()
-        stateTime.setTimeByParameters(time.currentSeconds, time.currentMinute, time.currentHours, time.currentDays,
-                                      time.currentMonths, time.currentYears)
-        stateTime.addTime(-self.lastStateTime.currentSeconds,
-                                                        -self.lastStateTime.currentMinute,
-                                                        -self.lastStateTime.currentHours,
-                                                        -self.lastStateTime.currentDays,
-                                                        -self.lastStateTime.currentMonths,
-                                                        -self.lastStateTime.currentYears)
-        self.timeInState[self.state.getNum()].addTime(stateTime.currentSeconds, stateTime.currentMinute,
-                                             stateTime.currentHours, stateTime.currentDays,
-                                             stateTime.currentMonths, stateTime.currentYears)
-        self.lastStateTime = time
+
+        if self.lastStateTime.isLowerThanTime(time):
+            stateTime = SimulationTime()
+            stateTime.setTimeByParameters(time.currentSeconds, time.currentMinute, time.currentHours, time.currentDays,
+                                          time.currentMonths, time.currentYears)
+            stateTime.addTime(-self.lastStateTime.currentSeconds,
+                                                            -self.lastStateTime.currentMinute,
+                                                            -self.lastStateTime.currentHours,
+                                                            -self.lastStateTime.currentDays,
+                                                            -self.lastStateTime.currentMonths,
+                                                            -self.lastStateTime.currentYears)
+            self.timeInState[self.state.getNum()].addTime(stateTime.currentSeconds, stateTime.currentMinute,
+                                                 stateTime.currentHours, stateTime.currentDays,
+                                                 stateTime.currentMonths, stateTime.currentYears)
+            self.lastStateTime = time
+        # if it's the same time or higher, means that this event should have already happened
+        if self.timeInState[self.state.getNum()].currentYears < 0:
+
+            print("error")
         self.state = state;
 
     def createConnection(self, pis):

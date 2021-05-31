@@ -68,7 +68,38 @@ class SimulationTime:
         self.currentDays = self.currentDays % 30
         self.currentYears += math.floor(self.currentMonths / 12) + y
         self.currentMonths = self.currentMonths % 12
+
         return self
+
+    def isLowerThanTime(self,  time):
+        if self.currentYears < time.currentYears:
+            return 1
+        if self.currentYears > time.currentYears:
+            return 0
+
+        if self.currentMonths < time.currentMonths:
+            return 1
+        if self.currentMonths > time.currentMonths:
+            return 0
+
+        if self.currentDays < time.currentDays:
+            return 1
+        if self.currentDays > time.currentDays:
+            return 0
+
+        if self.currentHours < time.currentHours:
+            return 1
+        if self.currentHours > time.currentHours:
+            return 0
+
+        if self.currentMinute < time.currentMinute:
+            return 1
+        if self.currentMinute > time.currentMinute:
+            return 0
+
+        if self.currentSeconds < time.currentSeconds:
+            return 1
+        return 0
 
 
 class TimeManager:
@@ -111,34 +142,7 @@ class TimeManager:
         return self.isTimeLowerThanTime(self.maxTime, time)
 
     def isTimeLowerThanTime(self, time1: SimulationTime, time2: SimulationTime):
-        if time1.currentYears < time2.currentYears:
-            return 1
-        if time1.currentYears > time2.currentYears:
-            return 0
-
-        if time1.currentMonths < time2.currentMonths:
-            return 1
-        if time1.currentMonths > time2.currentMonths:
-            return 0
-
-        if time1.currentDays < time2.currentDays:
-            return 1
-        if time1.currentDays > time2.currentDays:
-            return 0
-
-        if time1.currentHours < time2.currentHours:
-            return 1
-        if time1.currentHours > time2.currentHours:
-            return 0
-
-        if time1.currentMinute < time2.currentMinute:
-            return 1
-        if time1.currentMinute > time2.currentMinute:
-            return 0
-
-        if time1.currentSeconds < time2.currentSeconds:
-            return 1
-        return 0
+        return time1.isLowerThanTime(time2)
 
     def setSimulationTime(self, timeToWait: SimulationTime):
         self.maxTime = self.addTime(self.initialTime, timeToWait.currentSeconds, timeToWait.currentMinute,
