@@ -1,8 +1,6 @@
-import plotly.graph_objects as go
 import plotly.express as px
 from Elevator import ElevatorState
 from SimulatorManager import SimulatorManager
-#matplotlib
 
 
 class StatisticsManager:
@@ -37,13 +35,7 @@ class StatisticsManager:
         fig.write_html(chartName)
 
     def createElevatorBrokenTimesChart(self, elevatorNames, elevatorBrokenTimes):
-        params = {"y": elevatorBrokenTimes,
-                  "name": "Times broken each elevator",
-                  "showlegend": True,
-                  "text": elevatorNames,
-                  "ids": elevatorNames,
-                  "hovertext": elevatorNames}
-        fig = go.Figure(go.Bar(params))
+        fig = px.bar(y=elevatorBrokenTimes, x=elevatorNames, title="Times broken each elevator")
         chartName = "figures/" + self.simulatorManager.timeManager.initialTime.getDateAsFileName() + "_ElevatorBrokenTimes.html"
         fig.write_html(chartName, True)
 
@@ -56,12 +48,6 @@ class StatisticsManager:
             maxPeopleWaitingInFloors.append(floor.maxPeopleWaiting)
             floorNames.append(floorName)
 
-        params = {"y": maxPeopleWaitingInFloors,
-                  "name": "Max people waiting in each floor",
-                  "showlegend": True,
-                  "text": floorNames,
-                  "ids": floorNames,
-                  "hovertext": floorNames}
-        fig = go.Figure(go.Bar(params))
+        fig = px.bar(y=maxPeopleWaitingInFloors, x=floorNames, title="Max people waiting in each floor")
         chartName = "figures/" + self.simulatorManager.timeManager.initialTime.getDateAsFileName() + "_maxPeopleWaiting.html"
         fig.write_html(chartName, True)

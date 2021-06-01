@@ -57,13 +57,13 @@ class Elevator:
             stateTime = SimulationTime()
             stateTime.setTimeByParameters(time.currentSeconds, time.currentMinute, time.currentHours, time.currentDays,
                                           time.currentMonths, time.currentYears)
-            stateTime.addTime(-self.lastStateTime.currentSeconds,
+            stateTime.addTimeWithoutFormat(-self.lastStateTime.currentSeconds,
                                                             -self.lastStateTime.currentMinute,
                                                             -self.lastStateTime.currentHours,
                                                             -self.lastStateTime.currentDays,
                                                             -self.lastStateTime.currentMonths,
                                                             -self.lastStateTime.currentYears)
-            self.timeInState[self.state.getNum()].addTime(stateTime.currentSeconds, stateTime.currentMinute,
+            self.timeInState[self.state.getNum()].addTimeWithoutFormat(stateTime.currentSeconds, stateTime.currentMinute,
                                                  stateTime.currentHours, stateTime.currentDays,
                                                  stateTime.currentMonths, stateTime.currentYears)
             self.lastStateTime = time

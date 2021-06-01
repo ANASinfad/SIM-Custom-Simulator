@@ -52,6 +52,29 @@ class SimulationTime:
         return hours + self.currentMinute / 60 + self.currentSeconds / 3600
 
     def addTime(self, s, minutes, h, d, m, y):
+        #post s >= 0 and < 60
+        # min >= 0 and < 60
+        # h >= 0 and < 24
+        # d >= 1 and < 30
+        #m >= 1 and <= 12
+        # y >= 0
+        self.currentSeconds += s
+        self.currentMinute += math.floor(self.currentSeconds / 60) + minutes
+        self.currentSeconds = self.currentSeconds % 60
+        self.currentHours += math.floor(self.currentMinute / 60) + h
+        self.currentMinute = self.currentMinute % 60
+        self.currentDays += math.floor(self.currentHours / 24) + d
+        self.currentHours = self.currentHours % 24
+        self.currentMonths += math.floor((self.currentDays - 1) / 31) + m
+        if self.currentDays == 32:
+            self.currentDays = 1
+        self.currentYears += math.floor((self.currentMonths - 1) / 12) + y
+        if self.currentMonths == 13:
+            self.currentMonths = 1
+
+        return self
+
+    def addTimeWithoutFormat(self, s, minutes, h, d, m, y):
         # s >= 0 and < 60
         # min >= 0 and < 60
         # h >= 0 and < 24
@@ -64,8 +87,8 @@ class SimulationTime:
         self.currentMinute = self.currentMinute % 60
         self.currentDays += math.floor(self.currentHours / 24) + d
         self.currentHours = self.currentHours % 24
-        self.currentMonths += math.floor(self.currentDays / 30) + m
-        self.currentDays = self.currentDays % 30
+        self.currentMonths += math.floor(self.currentDays / 31) + m
+        self.currentDays = self.currentDays % 31
         self.currentYears += math.floor(self.currentMonths / 12) + y
         self.currentMonths = self.currentMonths % 12
 
@@ -125,14 +148,27 @@ class TimeManager:
                                    time.currentMonths, time.currentYears)
         return result.addTime(s, minutes, h, d, m, y)
 
+    def addTimeWithoutFormat(self, time: SimulationTime, s, minutes, h, d, m, y):
+        # s >= 0 and < 60
+        # min >= 0 and < 60
+        # h >= 0 and < 24
+        # d >= 0 and < 30
+        # y >= 0
+
+        result = SimulationTime()
+        result.setTimeByParameters(time.currentSeconds, time.currentMinute, time.currentHours, time.currentDays,
+                                   time.currentMonths, time.currentYears)
+        return result.addTimeWithoutFormat(s, minutes, h, d, m, y)
+
     def eventIsInTime(self, eventTime: SimulationTime):
         if self.instantSimulation:
             return 1
         currentTime = self.getCurrentTime()
-        timeToWait = self.addTime(eventTime, -currentTime.currentSeconds, -currentTime.currentMinute,
+        if self.isTimeLowerThanTime(currentTime, eventTime):
+            timeToWait = self.addTimeWithoutFormat(eventTime, -currentTime.currentSeconds, -currentTime.currentMinute,
                                   -currentTime.currentHours, -currentTime.currentDays, -currentTime.currentMonths,
                                   -currentTime.currentYears)
-        self.sleepTime(timeToWait)
+            self.sleepTime(timeToWait)
         return 1
 
     def setInstantSimulation(self, instantSimulation):
