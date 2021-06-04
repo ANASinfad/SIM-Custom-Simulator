@@ -19,8 +19,8 @@ class Scheduler:
 
     def run(self):
 
-
-        # para generar una entidad(persona) // hay que enviar la señal de simulation_start
+        # Definim el primer esdeveniment d'arribada de persona, cada cop que
+        # es tracti un esdeveniment d'arribada, es planificarà una nova arribada
         self.entityGenerator.generateFirstEntity()
 
         while self.simulatorManager.simulationNotFinished():

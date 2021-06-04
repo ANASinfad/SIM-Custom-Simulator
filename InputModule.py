@@ -19,7 +19,7 @@ class InputModule:
             print('se establecerá un tiempo de transporte por defecto')
             self.ascensorTransportTime = CONST_DEFAULT_TRANSPORT_TIME
 
-        respuesta = YesNoQuestion('¿Desea definir el maximo número de usos de cada ascensor?')
+        respuesta = YesNoQuestion('¿Desea definir el valor medio en que se rompe cada ascensor?')
         if respuesta == "si":
             self.MTF1 = int(input('indique el numero de usos del primer ascensor: '))
             self.MTF2 = int(input('indique el numero de usos del segundo ascensor: '))

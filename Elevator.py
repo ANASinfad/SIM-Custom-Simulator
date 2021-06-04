@@ -20,12 +20,7 @@ class ElevatorState(enum.Enum):
         return self.value[0]
 
 class TransitionsEnum(enum.Enum):
-    REACH_DESTINATION = 0
-    BREAK = 1
     FIX = 2
-    DOORS_CLOSED = 3
-    ONE_BROKEN = 4
-    ALL_FIXED = 5
     CALL = 6
     NEW_ARRIVAL = 7
 

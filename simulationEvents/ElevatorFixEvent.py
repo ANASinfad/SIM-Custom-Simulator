@@ -10,7 +10,7 @@ from simulationEvents.EventsManager import EventStatus
 
 class ElevatorFixEvent(Event):
     def __init__(self, simulatorManager: SimulatorManager, entity, time):
-        super().__init__(simulatorManager, entity, ElevatorState.ENTITY_TRANSFER, time)
+        super().__init__(simulatorManager, entity, TransitionsEnum.FIX, time)
 
     def treatEvent(self):
         if self.entity.state == ElevatorState.BROKEN:
