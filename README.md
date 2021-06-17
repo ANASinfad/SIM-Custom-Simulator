@@ -44,3 +44,8 @@ L’ascensor només es mou entre els pisos dels que els crida, per exemple, si u
 Les persones de l’ascensor baixen en el següent pis en què ha de parar l’ascensor.
 El temps per anar de un pis a l’altre es el mateix per cada pis. Aquest temps es defineix a partir de la consola.
 
+# Fet amb
+
+* [Python](https://docs.python.org/3/) - language used
+* [PyCharm](https://www.jetbrains.com/es-es/pycharm/) - IDE used
+
